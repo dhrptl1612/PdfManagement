@@ -1,5 +1,5 @@
 // src/components/pdf/CommentSection.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import pdfService from '../../services/pdfService';
 import { 
   Paper, Typography, TextField, Button, List, 
@@ -17,26 +17,26 @@ const CommentSection = ({ fileId }) => {
   const [error, setError] = useState('');
   const commentListRef = useRef(null);
 
-  const fetchComments = async () => {
-    try {
-      setLoading(true);
-      const response = await pdfService.getComments(fileId);
-      setComments(response.data);
-      setError('');
-    } catch (err) {
-      console.error('Error fetching comments:', err);
-      setError('Failed to load comments. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchComments = useCallback(async () => {
+  try {
+    setLoading(true);
+    const response = await pdfService.getComments(fileId);
+    setComments(response.data);
+    setError('');
+  } catch (err) {
+    console.error('Error fetching comments:', err);
+    setError('Failed to load comments. Please try again later.');
+  } finally {
+    setLoading(false);
+  }
+}, [fileId]);
 
   useEffect(() => {
     fetchComments();
     // Set up polling to refresh comments
     const interval = setInterval(fetchComments, 10000);
     return () => clearInterval(interval);
-  }, [fileId]);
+  }, [fileId,fetchComments]);
 
   useEffect(() => {
     // Scroll to bottom when comments change

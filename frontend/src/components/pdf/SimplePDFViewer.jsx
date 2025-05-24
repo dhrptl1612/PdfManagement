@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
-  Container, Grid, Paper, Box, Typography,
+  Container, Grid, Paper, Box,
   CircularProgress, Alert
 } from '@mui/material';
 import CommentSection from './CommentSection';
@@ -12,7 +12,7 @@ const SimplePDFViewer = () => {
   const [error, setError] = useState('');
   
   // Use direct PDF URL
-  const pdfUrl = `http://localhost:8000/uploads/${fileId}.pdf`;
+  const pdfUrl = `https://pdfmanagement-54ay.onrender.com/uploads/${fileId}.pdf`;
   
   const handleIframeLoad = () => {
     setLoading(false);

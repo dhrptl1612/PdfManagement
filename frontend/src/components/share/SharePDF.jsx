@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import pdfService from '../../services/pdfService';
 import { 
   Dialog, DialogTitle, DialogContent, DialogActions, 
-  TextField, Button, Alert, Typography, Box
+  TextField, Button, Alert, Typography
 } from '@mui/material';
 
 const SharePDF = ({ open, onClose, fileId, fileName }) => {

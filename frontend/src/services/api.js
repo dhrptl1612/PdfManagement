@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Base API URL - change to your backend URL
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'https://pdfmanagement-54ay.onrender.com';
 
 const api = axios.create({
   baseURL: API_URL
