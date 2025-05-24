@@ -5,6 +5,22 @@ import os
 from datetime import datetime
 from utils import get_current_user
 from models import ShareRequest
+from bson import ObjectId
+from fastapi.responses import FileResponse
+from bson import json_util
+import json
+
+# Helper function to convert MongoDB documents to dictionaries
+def serialize_mongo_doc(doc):
+    if doc is None:
+        return None
+    doc_dict = {}
+    for key, value in doc.items():
+        if isinstance(value, ObjectId):
+            doc_dict[key] = str(value)
+        else:
+            doc_dict[key] = value
+    return doc_dict
 
 router = APIRouter()
 
@@ -38,18 +54,32 @@ def list_pdfs(user: str = Depends(get_current_user)):
 
 @router.post("/comment")
 def add_comment(file_id: str = Form(...), text: str = Form(...), user: str = Depends(get_current_user)):
-    db.comments.insert_one({
+    comment = {
         "file_id": file_id,
         "user_email": user,
         "text": text,
         "timestamp": datetime.utcnow().isoformat()
-    })
-    return {"message": "Comment added"}
+    }
+    result = db.comments.insert_one(comment)
+    
+    # Return the comment with the new ObjectId converted to string
+    return {
+        "message": "Comment added",
+        "comment": {
+            "id": str(result.inserted_id),
+            "file_id": file_id,
+            "user_email": user,
+            "text": text,
+            "timestamp": comment["timestamp"]
+        }
+    }
 
 @router.get("/comments/{file_id}")
 def get_comments(file_id: str):
-    comments = db.comments.find({"file_id": file_id})
-    return list(comments)
+    comments = list(db.comments.find({"file_id": file_id}))
+    # Use PyMongo's json_util to handle MongoDB types
+    json_data = json_util.dumps(comments)
+    return json.loads(json_data)
 
 @router.post("/share")
 def share_pdf(data: ShareRequest, user: str = Depends(get_current_user)):
@@ -61,3 +91,11 @@ def share_pdf(data: ShareRequest, user: str = Depends(get_current_user)):
         "$addToSet": {"shared_with": data.share_with}
     })
     return {"message": "PDF shared"}
+
+# Add direct PDF viewing endpoint
+@router.get("/view/{file_id}")
+async def view_pdf(file_id: str):
+    pdf_path = os.path.join(UPLOAD_DIR, f"{file_id}.pdf")
+    if not os.path.exists(pdf_path):
+        raise HTTPException(status_code=404, detail="PDF not found")
+    return FileResponse(pdf_path, media_type="application/pdf")
