@@ -52,7 +52,7 @@ const UploadPDF = () => {
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
       
-      <input
+      <input 
         type="file"
         accept=".pdf"
         id="pdf-upload-input"
@@ -73,6 +73,8 @@ const UploadPDF = () => {
         </Button>
       </label>
 
+      
+      <br />
       {selectedFile && (
         <Box sx={{ display: 'flex', alignItems: 'center', mt: 2, mb: 3, justifyContent: 'center' }}>
           <PictureAsPdfIcon color="primary" sx={{ mr: 1 }} />
