@@ -20,3 +20,7 @@ os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(auth_router, prefix="/auth")
 app.include_router(pdf_router, prefix="/pdf")
+
+app.get("/")
+def welcome():
+    return {"message":"Welcome to pdf management"}
