@@ -1,4 +1,3 @@
-// src/components/common/NavBar.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';

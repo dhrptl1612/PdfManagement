@@ -1,4 +1,3 @@
-// src/components/pdf/SharedPDFViewer.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
@@ -13,7 +12,6 @@ const SharedPDFViewer = () => {
   const [error, setError] = useState('');
   const [pdfFound, setPdfFound] = useState(false);
   
-  // URL for the PDF
   const pdfUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/pdf/view/${fileId}`;
   
   const handleIframeLoad = () => {
@@ -26,7 +24,6 @@ const SharedPDFViewer = () => {
     setLoading(false);
   };
 
-  // Check if the PDF exists as the page loads
   useEffect(() => {
     const checkPdfExists = async () => {
       try {

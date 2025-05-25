@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';

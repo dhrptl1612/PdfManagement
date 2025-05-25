@@ -1,4 +1,3 @@
-// src/components/share/SharePDF.jsx
 import React, { useState } from 'react';
 import pdfService from '../../services/pdfService';
 import { 

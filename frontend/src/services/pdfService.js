@@ -1,4 +1,3 @@
-// src/services/pdfService.js
 import api from './api';
 
 const pdfService = {
@@ -34,12 +33,10 @@ const pdfService = {
     });
   },
   
-  // Add delete function
   deletePDF: async (fileId) => {
     return await api.delete(`/pdf/delete/${fileId}`);
   },
   
-  // Get shareable link
   getShareableLink: async (fileId) => {
     return await api.get(`/pdf/shared-link/${fileId}`);
   }

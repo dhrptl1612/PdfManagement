@@ -1,4 +1,3 @@
-// src/components/pdf/CommentSection.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import pdfService from '../../services/pdfService';
 import { 
@@ -33,13 +32,11 @@ const CommentSection = ({ fileId }) => {
 
   useEffect(() => {
     fetchComments();
-    // Set up polling to refresh comments
     const interval = setInterval(fetchComments, 10000);
     return () => clearInterval(interval);
   }, [fileId,fetchComments]);
 
   useEffect(() => {
-    // Scroll to bottom when comments change
     if (commentListRef.current) {
       commentListRef.current.scrollTop = commentListRef.current.scrollHeight;
     }
@@ -54,7 +51,6 @@ const CommentSection = ({ fileId }) => {
       setError('');
       await pdfService.addComment(fileId, newComment);
       setNewComment('');
-      // Fetch comments to update the list
       await fetchComments();
     } catch (err) {
       console.error('Error adding comment:', err);
@@ -78,7 +74,7 @@ const CommentSection = ({ fileId }) => {
         Comments
       </Typography>
       
-      {/* Comments list */}
+     
       <Box 
         ref={commentListRef}
         sx={{ 
@@ -123,7 +119,6 @@ const CommentSection = ({ fileId }) => {
       
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       
-      {/* Comment form */}
       <Box component="form" onSubmit={handleSubmit}>
         <TextField
           fullWidth

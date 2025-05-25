@@ -25,7 +25,6 @@ const PDFList = () => {
   const [pdfToDelete, setPdfToDelete] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch PDFs on component mount
   useEffect(() => {
     fetchPDFs();
   }, []);
@@ -43,7 +42,6 @@ const PDFList = () => {
     }
   };
 
-  // Filter PDFs based on search query
   useEffect(() => {
     if (searchQuery) {
       const filtered = pdfs.filter(pdf => 
@@ -78,7 +76,6 @@ const PDFList = () => {
       await pdfService.deletePDF(pdfToDelete.file_id);
       setDeleteDialogOpen(false);
       setPdfToDelete(null);
-      // Refresh the PDF list
       fetchPDFs();
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to delete PDF');
@@ -131,7 +128,6 @@ const PDFList = () => {
                   <IconButton edge="end" onClick={() => handleSharePdf(pdf)}>
                     <ShareIcon />
                   </IconButton>
-                  {/* Only show delete button if user is the owner */}
                   {pdf.is_owner && (
                     <IconButton edge="end" onClick={() => handleDeleteClick(pdf)} color="error">
                       <DeleteIcon />
@@ -144,7 +140,6 @@ const PDFList = () => {
         </Paper>
       )}
 
-      {/* Share Dialog */}
       {selectedPdf && (
         <SharePDF 
           open={shareDialogOpen} 
@@ -154,7 +149,6 @@ const PDFList = () => {
         />
       )}
       
-      {/* Delete Confirmation Dialog */}
       <Dialog
         open={deleteDialogOpen}
         onClose={handleDeleteCancel}

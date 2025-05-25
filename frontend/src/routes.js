@@ -1,4 +1,3 @@
-// src/routes.js
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/auth/Login';

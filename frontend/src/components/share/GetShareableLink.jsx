@@ -1,4 +1,3 @@
-// src/components/share/GetShareableLink.jsx
 import React, { useState } from 'react';
 import pdfService from '../../services/pdfService';
 import {
@@ -18,7 +17,6 @@ const GetShareableLink = ({ open, onClose, fileId, fileName }) => {
     if (open && fileId) {
       fetchShareableLink();
     } else {
-      // Reset state when dialog closes
       setShareUrl('');
       setError('');
     }
@@ -28,7 +26,6 @@ const GetShareableLink = ({ open, onClose, fileId, fileName }) => {
     try {
       setLoading(true);
       const response = await pdfService.getShareableLink(fileId);
-      // Construct the full URL for sharing
       const baseUrl = window.location.origin;
       setShareUrl(`${baseUrl}${response.data.share_url}`);
       setError('');

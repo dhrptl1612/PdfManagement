@@ -1,4 +1,3 @@
-// src/components/pdf/PDFViewer.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -10,7 +9,6 @@ import {
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-// Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const PDFViewer = () => {
@@ -22,7 +20,6 @@ const PDFViewer = () => {
   const [pdfUrl, setPdfUrl] = useState('');
   
   useEffect(() => {
-    // Assuming your PDF files are served from this endpoint
     const url = `http://localhost:8000/pdf/view/${fileId}`;
     setPdfUrl(url);
     setLoading(false);
@@ -44,7 +41,6 @@ const PDFViewer = () => {
   return (
     <Container maxWidth="xl" sx={{ mt: 4 }}>
       <Grid container spacing={3}>
-        {/* PDF Viewer */}
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 2, height: '85vh', display: 'flex', flexDirection: 'column', alignItems: 'center', overflow: 'auto' }}>
             {loading ? (
@@ -97,7 +93,6 @@ const PDFViewer = () => {
           </Paper>
         </Grid>
         
-        {/* Comments Section */}
         <Grid item xs={12} md={4}>
           <CommentSection fileId={fileId} />
         </Grid>

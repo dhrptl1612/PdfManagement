@@ -1,4 +1,3 @@
-// src/components/pdf/SimplePDFViewer.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
@@ -12,7 +11,6 @@ const SimplePDFViewer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Use the updated endpoint that serves from GridFS
   const pdfUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/pdf/view/${fileId}`;
   
   const handleIframeLoad = () => {
@@ -64,7 +62,6 @@ const SimplePDFViewer = () => {
           </Paper>
         </Grid>
         
-        {/* Comments Section */}
         <Grid item xs={12} md={4}>
           <CommentSection fileId={fileId} />
         </Grid>

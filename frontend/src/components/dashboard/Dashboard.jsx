@@ -1,4 +1,3 @@
-// src/components/dashboard/Dashboard.jsx
 import React, { useState } from 'react';
 import { Container, Box, Tabs, Tab, Typography } from '@mui/material';
 import PDFList from './PDFList';
