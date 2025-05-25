@@ -1,7 +1,8 @@
+// src/components/pdf/SimplePDFViewer.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { 
-  Container, Grid, Paper, Box,
+  Container, Grid, Paper, Box, 
   CircularProgress, Alert
 } from '@mui/material';
 import CommentSection from './CommentSection';
@@ -11,8 +12,8 @@ const SimplePDFViewer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Use direct PDF URL
-  const pdfUrl = `https://pdfmanagement-54ay.onrender.com/uploads/${fileId}.pdf`;
+  // Use the updated endpoint that serves from GridFS
+  const pdfUrl = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/pdf/view/${fileId}`;
   
   const handleIframeLoad = () => {
     setLoading(false);
@@ -71,6 +72,5 @@ const SimplePDFViewer = () => {
     </Container>
   );
 };
-
 
 export default SimplePDFViewer;

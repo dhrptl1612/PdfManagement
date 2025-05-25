@@ -1,15 +1,16 @@
-// src/components/dashboard/PDFList.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import pdfService from '../../services/pdfService';
 import {
   Box, Typography, List, ListItem, ListItemText, 
   ListItemSecondaryAction, IconButton, Paper, 
-  InputAdornment, TextField, CircularProgress, Alert
+  InputAdornment, TextField, CircularProgress, Alert,
+  Dialog, DialogTitle, DialogContent, DialogActions, Button,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShareIcon from '@mui/icons-material/Share';
+import DeleteIcon from '@mui/icons-material/Delete';
 import SharePDF from '../share/SharePDF';
 
 const PDFList = () => {
@@ -20,25 +21,27 @@ const PDFList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [pdfToDelete, setPdfToDelete] = useState(null);
   const navigate = useNavigate();
 
   // Fetch PDFs on component mount
   useEffect(() => {
-    const fetchPDFs = async () => {
-      try {
-        setLoading(true);
-        const response = await pdfService.listPDFs();
-        setPdfs(response.data);
-        setFilteredPdfs(response.data);
-      } catch (err) {
-        setError(err.response?.data?.detail || 'Failed to load PDFs');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPDFs();
   }, []);
+
+  const fetchPDFs = async () => {
+    try {
+      setLoading(true);
+      const response = await pdfService.listPDFs();
+      setPdfs(response.data);
+      setFilteredPdfs(response.data);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to load PDFs');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter PDFs based on search query
   useEffect(() => {
@@ -63,6 +66,28 @@ const PDFList = () => {
 
   const handleShareDialogClose = () => {
     setShareDialogOpen(false);
+  };
+  
+  const handleDeleteClick = (pdf) => {
+    setPdfToDelete(pdf);
+    setDeleteDialogOpen(true);
+  };
+  
+  const handleDeleteConfirm = async () => {
+    try {
+      await pdfService.deletePDF(pdfToDelete.file_id);
+      setDeleteDialogOpen(false);
+      setPdfToDelete(null);
+      // Refresh the PDF list
+      fetchPDFs();
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to delete PDF');
+    }
+  };
+  
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setPdfToDelete(null);
   };
 
   return (
@@ -106,6 +131,12 @@ const PDFList = () => {
                   <IconButton edge="end" onClick={() => handleSharePdf(pdf)}>
                     <ShareIcon />
                   </IconButton>
+                  {/* Only show delete button if user is the owner */}
+                  {pdf.is_owner && (
+                    <IconButton edge="end" onClick={() => handleDeleteClick(pdf)} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
@@ -113,6 +144,7 @@ const PDFList = () => {
         </Paper>
       )}
 
+      {/* Share Dialog */}
       {selectedPdf && (
         <SharePDF 
           open={shareDialogOpen} 
@@ -121,6 +153,26 @@ const PDFList = () => {
           fileName={selectedPdf.filename}
         />
       )}
+      
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+      >
+        <DialogTitle>Delete PDF</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete "{pdfToDelete?.filename}"?
+            This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -32,7 +32,18 @@ const pdfService = {
       file_id: fileId,
       share_with: shareWith
     });
+  },
+  
+  // Add delete function
+  deletePDF: async (fileId) => {
+    return await api.delete(`/pdf/delete/${fileId}`);
+  },
+  
+  // Get shareable link
+  getShareableLink: async (fileId) => {
+    return await api.get(`/pdf/shared-link/${fileId}`);
   }
 };
+
 
 export default pdfService;
