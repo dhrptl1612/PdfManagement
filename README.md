@@ -283,7 +283,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👥 Contributors
 
-- [Your Name](https://github.com/yourusername)
+- [Dhruvi Patel](https://github.com/dhrptl1612)
 
 ## 🙏 Acknowledgements
 
